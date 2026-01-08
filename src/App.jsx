@@ -1,24 +1,34 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import Thumbnail from "./components/Thumbnail";
+import PlaceholderImage from "./components/PlaceHolderImage";
+
 //dont just code in app.jsx, always use components!
 //start with wireframe and build from a UI first approach
 
 function App() {
-  // variable to store api image data
   const [thumbs, setThumbs] = useState([]);
-  // variable to store current image
-  // const [image, setImage] = useState([]);
+  const [bigImage, setBigImage] = useState([
+    <PlaceholderImage key="PlaceholderImage" />,
+  ]);
 
   //EFFECTS
-  // fetch api data and put fetched api data in state
+
+  function RandomPage() {
+    let num = Math.floor(Math.random() * 30);
+    return num;
+  }
+
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch("https://week-6-api.vercel.app/api/images");
+      const response = await fetch(
+        `https://api.unsplash.com/search/photos?client_id=${
+          import.meta.env.VITE_ACCESS_KEY
+        }&query=puppy&&page=${RandomPage()}&&per_page=99&&orientation=landscape`
+      );
       const data = await response.json();
+      setThumbs(data.results);
       console.log(data);
-      setThumbs(data);
-      console.log(data[0].title);
     }
     fetchData();
   }, []);
@@ -29,15 +39,32 @@ function App() {
   //when user enters search field
 
   return (
-    <div>
+    <div className="body">
       <h1>Image Gallery</h1>
       <div className="thumbnail-container">
-        {thumbs.map((thumb) => {
-          <Thumbnail key={thumb.id} src={thumb.url} alt={thumb.alt} />;
-          console.log(thumb.alt);
+        {thumbs.map((thumb, index) => {
+          return (
+            <Thumbnail
+              src={thumb.urls.thumb}
+              alt={thumb.alt_description}
+              key={thumb.id}
+              id={index}
+              onClick={() => {
+                setBigImage(
+                  <img
+                    src={thumb.urls.raw}
+                    alt={thumb.alt_description}
+                    key={thumb.id + "fullscreen"}
+                    id={index}
+                  ></img>
+                );
+                console.log(bigImage);
+              }}
+            />
+          );
         })}
       </div>
-      <div className="fullscreen-div">main image (or a modal)</div>
+      <div className="fullscreen-div">{bigImage}</div>
     </div>
   );
 }
