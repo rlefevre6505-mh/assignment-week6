@@ -5,6 +5,16 @@
   text-align: center;
 }
 
+.thumbnail-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: 200px;
+  min-width: 1000px;
+  border: solid greenyellow 5px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
