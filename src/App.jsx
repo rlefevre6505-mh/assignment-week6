@@ -1,22 +1,32 @@
 import { useState, useEffect } from "react";
-
 import "./App.css";
 import Thumbnail from "./components/Thumbnail";
 import PlaceholderImage from "./components/PlaceHolderImage";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 
 //dont just code in app.jsx, always use components!
 //start with wireframe and build from a UI first approach
 
 function App() {
+  //STATES
+  //
   //image handling states:
   const [thumbs, setThumbs] = useState([]);
   const [bigImage, setBigImage] = useState(0);
   //
   //search functionality states:
-  // const [inputText, setInputText] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredImages, setFilteredImages] = useState([thumbs]);
 
-  //Effects
+  //EFFECTS
+  //
+  //generate random number for pages worth of photos from API
+  function RandomPage() {
+    let num = Math.floor(Math.random() * 100);
+    return num;
+  }
+
+  //fetch API data
   useEffect(() => {
     async function fetchData() {
       const response = await fetch(
@@ -30,15 +40,24 @@ function App() {
     fetchData();
   }, []);
 
-  function RandomPage() {
-    let num = Math.floor(Math.random() * 30);
-    return num;
-  }
+  //filter thumbs dynamically based on search input
+  useEffect(() => {
+    setFilteredImages(filteredImages);
+  }, [filteredImages, searchQuery]);
 
-  // let inputHandler = (e) => {
-  //   let lowerCase = e.target.value.toLowerCase();
-  //   setInputText(lowerCase);
-  // };
+  useEffect(() => {
+    const query = searchQuery.toLowerCase();
+    const result = thumbs.filter((thumb) =>
+      thumb.alt_description.toLowerCase().includes(query)
+    );
+    setFilteredImages(result);
+    console.log("query triggered");
+  }, [searchQuery, thumbs]);
+
+  //clear search
+  const clearSearch = () => {
+    setSearchQuery("");
+  };
 
   // window.addEventListener("keydown", (event) => {
   //   let currentID = bigImage.props.id;
@@ -75,18 +94,33 @@ function App() {
 
   return (
     <div className="body">
-      <Header />
+      <header>
+        <h1>Daily Dose of Dogs</h1>
+        <div className="search-div">
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="search for key words"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className="reset-button" onClick={clearSearch}>
+            Clear search
+          </button>
+        </div>
+      </header>
       <div className="thumbnail-container">
         {thumbs.map((thumb, index) => {
           return (
             <Thumbnail
               src={thumb.urls.thumb}
-              lgsrc={thumb.urls.regular}
+              // lgsrc={thumb.urls.regular}
               alt={thumb.alt_description}
               key={thumb.id}
               id={index}
               onClick={() => {
                 setBigImage(index);
+                console.log(thumb.alt_description);
               }}
             />
           );
