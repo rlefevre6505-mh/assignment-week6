@@ -1,7 +1,12 @@
-export default function Thumbnail({ src, alt, onClick }) {
+export default function Thumbnail({ src, alt, onClick, onKeyDown }) {
   return (
-    <button className="thumbnail-button" onClick={onClick}>
-      <img className="thumbnail-image" src={src} alt={alt}></img>
-    </button>
+    <img
+      className="thumbnail-image"
+      tabIndex={0}
+      src={src}
+      alt={alt}
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+    ></img>
   );
 }

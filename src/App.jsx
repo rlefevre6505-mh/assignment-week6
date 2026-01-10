@@ -22,7 +22,7 @@ function App() {
   //
   //generate random number for pages worth of photos from API
   function RandomPage() {
-    let num = Math.floor(Math.random() * 100);
+    let num = Math.floor(Math.random() * 99);
     return num;
   }
 
@@ -45,17 +45,13 @@ function App() {
     setFilteredThumbs(filteredThumbs);
   }, [filteredThumbs]);
 
-  // TODO: conditional rendering - if filteredThumbs.length > 0, display filtered Thumbs, else display original thumbs
-
   useEffect(() => {
     const query = searchQuery.toLowerCase();
     const result = thumbs.filter((thumb) =>
       thumb.alt_description.toLowerCase().includes(query)
     );
     setFilteredThumbs(query ? result : thumbs);
-    console.log("query triggered");
-
-    console.log(filteredThumbs);
+    // console.log(filteredThumbs);
   }, [searchQuery, thumbs]);
 
   //clear search
@@ -64,6 +60,7 @@ function App() {
     setFilteredThumbs([]);
   };
 
+  //TODO: when user presses button that should switch image
   // window.addEventListener("keydown", (event) => {
   //   let currentID = bigImage.props.id;
   //   // console.log(currentID);
@@ -92,11 +89,6 @@ function App() {
   //   }
   // });
 
-  //FUNCTIONS
-  // when user clicks an image - update state
-  // when user presses button that should switch image
-  // when user enters search field
-
   return (
     <div className="body">
       <header>
@@ -120,13 +112,15 @@ function App() {
               return (
                 <Thumbnail
                   src={thumb.urls.thumb}
-                  // lgsrc={thumb.urls.regular}
                   alt={thumb.alt_description}
                   key={thumb.id}
                   id={index}
                   onClick={() => {
                     setBigImage(index);
                     console.log(thumb.alt_description);
+                  }}
+                  onKeyDown={(event) => {
+                    event.key === "Enter" ? setBigImage(index) : null;
                   }}
                 />
               );
@@ -141,6 +135,9 @@ function App() {
                   onClick={() => {
                     setBigImage(index);
                     console.log(filteredThumb.alt_description);
+                  }}
+                  onKeyDown={(event) => {
+                    event.key === "Enter" ? setBigImage(index) : null;
                   }}
                 />
               );
