@@ -2,10 +2,6 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import Thumbnail from "./components/Thumbnail";
 import PlaceholderImage from "./components/PlaceHolderImage";
-// import Header from "./components/Header";
-
-//dont just code in app.jsx, always use components!
-//start with wireframe and build from a UI first approach
 
 function App() {
   //STATES
@@ -43,6 +39,7 @@ function App() {
   //filter thumbs dynamically based on search input
   useEffect(() => {
     setFilteredThumbs(filteredThumbs);
+    console.log(filteredThumbs);
   }, [filteredThumbs]);
 
   useEffect(() => {
@@ -51,7 +48,6 @@ function App() {
       thumb.alt_description.toLowerCase().includes(query)
     );
     setFilteredThumbs(query ? result : thumbs);
-    // console.log(filteredThumbs);
   }, [searchQuery, thumbs]);
 
   //clear search
@@ -107,8 +103,9 @@ function App() {
         </div>
       </header>
       <div className="thumbnail-container">
-        {filteredThumbs.length <= 0
-          ? thumbs.map((thumb, index) => {
+        {filteredThumbs.length < 1
+          ? // THIS CODE BLOCK (THE ORIGINAL FUNCTION FOR MAPPING THROUGH MY THUMBNAILS) IS REDUNDANT SINCE IMPLEMENTING SEARCH FUNCTIONALITY, AND NOW DOES NOTHING
+            thumbs.map((thumb, index) => {
               return (
                 <Thumbnail
                   src={thumb.urls.thumb}
@@ -116,39 +113,44 @@ function App() {
                   key={thumb.id}
                   id={index}
                   onClick={() => {
-                    setBigImage(index);
-                    console.log(thumb.alt_description);
+                    setBigImage(thumb.index);
+                    // console.log(thumb.alt_description);
                   }}
                   onKeyDown={(event) => {
-                    event.key === "Enter" ? setBigImage(index) : null;
+                    event.key === "Enter" || event.key === " "
+                      ? setBigImage(index)
+                      : null;
                   }}
                 />
               );
             })
-          : filteredThumbs.map((filteredThumb, index) => {
+          : //When mapping through filteredThumbs, images are not being given an updated index value and clicking on an index of 7 in a filtered set of 10thumbnails returns the fullsize image with the index of 7 in the original array of 30 images
+            filteredThumbs.map((filteredThumb, index) => {
               return (
                 <Thumbnail
                   src={filteredThumb.urls.thumb}
                   alt={filteredThumb.alt_description}
-                  key={filteredThumb.id}
+                  key={filteredThumb.index}
                   id={index}
                   onClick={() => {
                     setBigImage(index);
                     console.log(filteredThumb.alt_description);
                   }}
                   onKeyDown={(event) => {
-                    event.key === "Enter" ? setBigImage(index) : null;
+                    event.key === "Enter" || event.key === " "
+                      ? setBigImage(index)
+                      : null;
                   }}
                 />
               );
             })}
       </div>
       <div className="fullscreen-div">
-        {thumbs.length > 0 ? (
+        {thumbs.length >= 30 ? (
           <img
             src={thumbs[bigImage].urls.regular}
             alt={thumbs[bigImage].alt_description}
-            key={thumbs[bigImage].id + "fullscreen"}
+            key={thumbs[bigImage].id + "ddod"}
             id={thumbs[bigImage].index}
           ></img>
         ) : (
