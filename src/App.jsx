@@ -14,9 +14,9 @@ function App() {
   const [thumbs, setThumbs] = useState([]);
   const [bigImage, setBigImage] = useState(0);
   //
-  //search functionality states:
+  //search functionality state:
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredImages, setFilteredImages] = useState([thumbs]);
+  const [filteredThumbs, setFilteredThumbs] = useState([]);
 
   //EFFECTS
   //
@@ -42,21 +42,26 @@ function App() {
 
   //filter thumbs dynamically based on search input
   useEffect(() => {
-    setFilteredImages(filteredImages);
-  }, [filteredImages, searchQuery]);
+    setFilteredThumbs(filteredThumbs);
+  }, [filteredThumbs]);
+
+  // TODO: conditional rendering - if filteredThumbs.length > 0, display filtered Thumbs, else display original thumbs
 
   useEffect(() => {
     const query = searchQuery.toLowerCase();
     const result = thumbs.filter((thumb) =>
       thumb.alt_description.toLowerCase().includes(query)
     );
-    setFilteredImages(result);
+    setFilteredThumbs(query ? result : thumbs);
     console.log("query triggered");
+
+    console.log(filteredThumbs);
   }, [searchQuery, thumbs]);
 
   //clear search
   const clearSearch = () => {
     setSearchQuery("");
+    setFilteredThumbs([]);
   };
 
   // window.addEventListener("keydown", (event) => {
@@ -110,21 +115,36 @@ function App() {
         </div>
       </header>
       <div className="thumbnail-container">
-        {thumbs.map((thumb, index) => {
-          return (
-            <Thumbnail
-              src={thumb.urls.thumb}
-              // lgsrc={thumb.urls.regular}
-              alt={thumb.alt_description}
-              key={thumb.id}
-              id={index}
-              onClick={() => {
-                setBigImage(index);
-                console.log(thumb.alt_description);
-              }}
-            />
-          );
-        })}
+        {filteredThumbs.length <= 0
+          ? thumbs.map((thumb, index) => {
+              return (
+                <Thumbnail
+                  src={thumb.urls.thumb}
+                  // lgsrc={thumb.urls.regular}
+                  alt={thumb.alt_description}
+                  key={thumb.id}
+                  id={index}
+                  onClick={() => {
+                    setBigImage(index);
+                    console.log(thumb.alt_description);
+                  }}
+                />
+              );
+            })
+          : filteredThumbs.map((filteredThumb, index) => {
+              return (
+                <Thumbnail
+                  src={filteredThumb.urls.thumb}
+                  alt={filteredThumb.alt_description}
+                  key={filteredThumb.id}
+                  id={index}
+                  onClick={() => {
+                    setBigImage(index);
+                    console.log(filteredThumb.alt_description);
+                  }}
+                />
+              );
+            })}
       </div>
       <div className="fullscreen-div">
         {thumbs.length > 0 ? (
