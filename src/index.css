@@ -63,7 +63,7 @@ h1 {
   background-color: rgba(255, 255, 255, 0.2);
   padding: 4px;
   border-radius: 4px;
-  overflow-x: scroll;
+  overflow: auto;
   /* scroll-snap-type: mandatory x; */
   scrollbar-color: rgba(255, 255, 255, 0.99) rgba(255, 255, 255, 0.2);
   scrollbar-width: thin;
@@ -72,15 +72,15 @@ h1 {
 .thumbnail-button {
   cursor: pointer;
   appearance: none;
-  height: 100%;
+  /* height: 100%; */
   width: 200px;
-  border: 2px solid rgba(0, 0, 0, 0);
+  border: solid orange 2px;
+  /* border: 2px solid rgba(0, 0, 0, 0); */
 }
 
 .thumbnail-image {
-  /* width: 200px; */
+  width: 200px;
   /* aspect-ratio: initial; */
-  border: solid orange 2px;
 }
 
 .fullscreen-div {

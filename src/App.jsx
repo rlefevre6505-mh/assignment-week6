@@ -55,13 +55,13 @@ function App() {
     setFilteredThumbs(query ? result : thumbs);
     console.log("query triggered");
 
-    // console.log(filteredThumbs);
+    console.log(filteredThumbs);
   }, [searchQuery, thumbs]);
 
   //clear search
   const clearSearch = () => {
     setSearchQuery("");
-    // setThumbs(thumbs);
+    setFilteredThumbs([]);
   };
 
   // window.addEventListener("keydown", (event) => {
@@ -115,21 +115,36 @@ function App() {
         </div>
       </header>
       <div className="thumbnail-container">
-        {thumbs.map((thumb, index) => {
-          return (
-            <Thumbnail
-              src={thumb.urls.thumb}
-              // lgsrc={thumb.urls.regular}
-              alt={thumb.alt_description}
-              key={thumb.id}
-              id={index}
-              onClick={() => {
-                setBigImage(index);
-                console.log(thumb.alt_description);
-              }}
-            />
-          );
-        })}
+        {filteredThumbs.length <= 0
+          ? thumbs.map((thumb, index) => {
+              return (
+                <Thumbnail
+                  src={thumb.urls.thumb}
+                  // lgsrc={thumb.urls.regular}
+                  alt={thumb.alt_description}
+                  key={thumb.id}
+                  id={index}
+                  onClick={() => {
+                    setBigImage(index);
+                    console.log(thumb.alt_description);
+                  }}
+                />
+              );
+            })
+          : filteredThumbs.map((filteredThumb, index) => {
+              return (
+                <Thumbnail
+                  src={filteredThumb.urls.thumb}
+                  alt={filteredThumb.alt_description}
+                  key={filteredThumb.id}
+                  id={index}
+                  onClick={() => {
+                    setBigImage(index);
+                    console.log(filteredThumb.alt_description);
+                  }}
+                />
+              );
+            })}
       </div>
       <div className="fullscreen-div">
         {thumbs.length > 0 ? (
