@@ -39,18 +39,9 @@ function App() {
   //filter thumbs dynamically based on search input
   useEffect(() => {
     setFilteredThumbs(filteredThumbs);
-    // console.log(filteredThumbs);
   }, [filteredThumbs]);
 
-  // useEffect(() => {
-  //   const query = searchQuery.toLowerCase();
-  //   const result = thumbs.filter((thumb) =>
-  //     thumb.alt_description.toLowerCase().includes(query)
-  //   );
-  //   setFilteredThumbs(query ? result : thumbs);
-  // }, [searchQuery, thumbs]);
-
-  //TODO: implement debounce
+  //TODO: implement debounce?
   useEffect(() => {
     const query = searchQuery.toLowerCase();
     const result = thumbs.filter((thumb) =>
@@ -67,6 +58,8 @@ function App() {
   };
 
   //TODO: when user presses button that should switch image
+  //This should be refactored into stand-alone functions with callbacks for onClick and onKeyDown
+  //
   // window.addEventListener("keydown", (event) => {
   //   let currentID = bigImage.props.id;
   //   // console.log(currentID);
@@ -100,8 +93,10 @@ function App() {
       <header>
         <h1>Daily Dose of Dogs</h1>
         <div className="search-div">
+          <label htmlFor="search-bar">Search</label>
           <input
             type="text"
+            name="search-bar"
             className="search-bar"
             placeholder="type key words to search"
             value={searchQuery}
@@ -134,8 +129,7 @@ function App() {
                 />
               );
             })
-          : //When mapping through filteredThumbs, images are not being given an updated index value and clicking on an index of 7 in a filtered set of 10thumbnails returns the fullsize image with the index of 7 in the original array of 30 images.
-            filteredThumbs.map((filteredThumb, index) => {
+          : filteredThumbs.map((filteredThumb, index) => {
               return (
                 <Thumbnail
                   src={filteredThumb.urls.thumb}
