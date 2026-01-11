@@ -39,15 +39,24 @@ function App() {
   //filter thumbs dynamically based on search input
   useEffect(() => {
     setFilteredThumbs(filteredThumbs);
-    console.log(filteredThumbs);
+    // console.log(filteredThumbs);
   }, [filteredThumbs]);
+
+  // useEffect(() => {
+  //   const query = searchQuery.toLowerCase();
+  //   const result = thumbs.filter((thumb) =>
+  //     thumb.alt_description.toLowerCase().includes(query)
+  //   );
+  //   setFilteredThumbs(query ? result : thumbs);
+  // }, [searchQuery, thumbs]);
 
   useEffect(() => {
     const query = searchQuery.toLowerCase();
     const result = thumbs.filter((thumb) =>
       thumb.alt_description.toLowerCase().includes(query)
     );
-    setFilteredThumbs(query ? result : thumbs);
+    setFilteredThumbs(result);
+    console.log(result);
   }, [searchQuery, thumbs]);
 
   //clear search
@@ -93,7 +102,7 @@ function App() {
           <input
             type="text"
             className="search-bar"
-            placeholder="search for key words"
+            placeholder="type key words to search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -113,7 +122,7 @@ function App() {
                   key={thumb.id}
                   id={index}
                   onClick={() => {
-                    setBigImage(thumb.index);
+                    setBigImage(index);
                     // console.log(thumb.alt_description);
                   }}
                   onKeyDown={(event) => {
@@ -124,13 +133,13 @@ function App() {
                 />
               );
             })
-          : //When mapping through filteredThumbs, images are not being given an updated index value and clicking on an index of 7 in a filtered set of 10thumbnails returns the fullsize image with the index of 7 in the original array of 30 images
+          : //When mapping through filteredThumbs, images are not being given an updated index value and clicking on an index of 7 in a filtered set of 10thumbnails returns the fullsize image with the index of 7 in the original array of 30 images.
             filteredThumbs.map((filteredThumb, index) => {
               return (
                 <Thumbnail
                   src={filteredThumb.urls.thumb}
                   alt={filteredThumb.alt_description}
-                  key={filteredThumb.index}
+                  key={index}
                   id={index}
                   onClick={() => {
                     setBigImage(index);
@@ -146,15 +155,21 @@ function App() {
             })}
       </div>
       <div className="fullscreen-div">
-        {thumbs.length >= 30 ? (
+        {filteredThumbs.length > 0 ? (
           <img
-            src={thumbs[bigImage].urls.regular}
-            alt={thumbs[bigImage].alt_description}
-            key={thumbs[bigImage].id + "ddod"}
-            id={thumbs[bigImage].index}
+            src={filteredThumbs[bigImage].urls.regular}
+            alt={filteredThumbs[bigImage].alt_description}
+            key={filteredThumbs[bigImage].id + "ddod"}
+            id={filteredThumbs[bigImage].index}
           ></img>
         ) : (
           <PlaceholderImage />
+          // <img
+          //   src={filteredThumbs[bigImage].urls.regular}
+          //   alt={filteredThumbs[bigImage].alt_description}
+          //   key={filteredThumbs[bigImage].id + "ddod"}
+          //   id={filteredThumbs[bigImage].index}
+          // ></img>
         )}
       </div>
     </div>
