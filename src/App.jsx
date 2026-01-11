@@ -163,12 +163,13 @@ function App() {
             id={filteredThumbs[bigImage].index}
           ></img>
         ) : (
-          <img
-            src={thumbs[bigImage].urls.regular}
-            alt={thumbs[bigImage].alt_description}
-            key={thumbs[bigImage].id + "ddod"}
-            id={thumbs[bigImage].index}
-          ></img>
+          <PlaceholderImage />
+          // <img
+          //   src={filteredThumbs[bigImage].urls.regular}
+          //   alt={filteredThumbs[bigImage].alt_description}
+          //   key={filteredThumbs[bigImage].id + "ddod"}
+          //   id={filteredThumbs[bigImage].index}
+          // ></img>
         )}
       </div>
     </div>
