@@ -50,6 +50,7 @@ function App() {
   //   setFilteredThumbs(query ? result : thumbs);
   // }, [searchQuery, thumbs]);
 
+  //TODO: implement debounce
   useEffect(() => {
     const query = searchQuery.toLowerCase();
     const result = thumbs.filter((thumb) =>
